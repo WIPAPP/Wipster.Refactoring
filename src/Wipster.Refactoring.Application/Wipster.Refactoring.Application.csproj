@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Wipster.Refactoring.Domain\Wipster.Refactoring.Domain.csproj" />
+    <ProjectReference Include="..\Wipster.Refactoring.Persistence\Wipster.Refactoring.Persistence.csproj" />
+  </ItemGroup>
+
+</Project>
