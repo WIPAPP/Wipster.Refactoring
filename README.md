@@ -1,0 +1,1 @@
+# Wipster.Refactoring
