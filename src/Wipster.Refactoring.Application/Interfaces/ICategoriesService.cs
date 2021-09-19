@@ -7,10 +7,11 @@ namespace Wipster.Refactoring.Application
 {
     public interface ICategoriesService
     {
-        Task<CategoriesListResponse> GetAll();
-        Task<CategoryResponse> Get(int categoryId);
-        Task<CategoryResponse> Create(CategoryRequest request);
-        Task<CategoryResponse> Update(int categoryId, CategoryRequest request);
-        Task<int> Delete(int categoryId);
+        Task<IEnumerable<Category>> GetAllCategoryAsync();
+        Task <Category> GetCategoryByIdAsync(int categoryId);
+        Task CreateCategoryAsync(Category category);
+        Task UpdateCategoryAsync(Category category);
+        Task<int> DeleteCategoryAsync(int categoryId);
+
     }
 }

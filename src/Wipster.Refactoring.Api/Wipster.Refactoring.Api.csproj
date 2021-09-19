@@ -2,11 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>93d37454-0f5f-4300-9079-da12991cb970</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="5.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.6" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.6">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.10">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -16,7 +20,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Wipster.Refactoring.Application\Wipster.Refactoring.Application.csproj" />
-    <ProjectReference Include="..\Wipster.Refactoring.Domain\Wipster.Refactoring.Domain.csproj" />
     <ProjectReference Include="..\Wipster.Refactoring.Persistence\Wipster.Refactoring.Persistence.csproj" />
   </ItemGroup>
 

@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
-using Wipster.Refactoring.Persistence;
+using Wipster.Refactoring.Domain;
 using Wipster.Refactoring.Application;
 
 namespace Wipster.Refactoring.Api
@@ -25,17 +25,26 @@ namespace Wipster.Refactoring.Api
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<NorthwindDbContext>();
-            services.AddTransient<ICategoriesService, CategoriesService>();
+
+          //  services.AddDbContext<NorthwindDbContext>(options =>
+          //  options.UseSqlite(Configuration.GetConnectionString("NorthwindDbConnection")));
+
+            services.AddDbContext<NorthwindDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("WipsterDbConnection")));
+
+
+            //services.AddDbContext<NorthwindDbContext>();
+
+            services.AddScoped<ICategoriesService, CategoriesService>();
+            services.AddScoped<IProductsService, ProductsService>();
             services.AddScoped<IEmployeesService, EmployeesService>();
 
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddControllers();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

@@ -1,16 +1,17 @@
-﻿using System.Threading.Tasks;
-using Wipster.Refactoring.Application.Dtos;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Wipster.Refactoring.Domain.Entities;
 
 namespace Wipster.Refactoring.Application
 {
     public interface IEmployeesService
     {
-        Task<EmployeesListResponse> GetAllAsync();
-        Task<EmployeesListResponse> GetAllByCityAsync(string city);
-        Task<EmployeesListResponse> GetAllByCountryAsync(string country);
-        Task<EmployeeResponse> GetByIdAsync(int id);
-        Task<EmployeeResponse> UpdateAsync(int id, EmployeeRequest request);
-        Task<EmployeeResponse> CreateAsync(EmployeeRequest request);
-        Task<int> DeleteAsync(int id);
+        Task<IEnumerable<Employee>> GetAllEmpAsync();
+        Task<IEnumerable<Employee>> GetAllEmpByCityAsync(string city);
+        Task<IEnumerable<Employee>> GetAllEmpByCountryAsync(string country);
+        Task<Employee> GetEmpByIdAsync(int id);
+        Task CreateEmpAsync(Employee emp);
+        Task UpdateEmpAsync(Employee emp);
+        Task DeleteEmpAsync(Employee emp);
     }
 }
