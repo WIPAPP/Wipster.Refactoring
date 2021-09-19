@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Wipster.Refactoring.Domain.Entities
+namespace Wipster.Refactoring.Application.DTOs.Employee
 {
-    public class Employee
+    public class CreateEmpDto   
     {
         public int EmployeeId { get; set; }
         public string LastName { get; set; }

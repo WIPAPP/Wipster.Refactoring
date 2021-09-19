@@ -2,10 +2,10 @@
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
-using Wipster.Refactoring.Domain.Entities;
-using Wipster.Refactoring.Persistence;
 using Wipster.Refactoring.Application;
-using Wipster.Refactoring.Application.Dtos;
+using AutoMapper;
+using Wipster.Refactoring.Application.DTOs.Employee;
+using Wipster.Refactoring.Domain.Entities;
 
 namespace Wipster.Refactoring.Api.Controllers
 {
@@ -13,52 +13,90 @@ namespace Wipster.Refactoring.Api.Controllers
     [ApiController]
     public class EmployeesController : ControllerBase
     {
-        private IEmployeesService EmployeesService;
+        private readonly IEmployeesService _employeesService;
+        private readonly IMapper _mapper;
 
-        public EmployeesController(IEmployeesService employees)
+        public EmployeesController(IEmployeesService employees, IMapper mapper)
         {
-            EmployeesService = employees;
+            _employeesService = employees;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<EmployeesListResponse>> GetAll([FromQuery] string country)
+        public async Task<ActionResult<IEnumerable<GetEmpDto>>> GetAllEmpAsync([FromQuery] string country)
         {
             if (country != null)
             {
-                return Ok(await EmployeesService.GetAllByCountryAsync(country));
+                return Ok(_mapper.Map<IEnumerable<GetEmpDto>>(await _employeesService.GetAllEmpByCountryAsync(country)));
             }
             else
             {
-                return Ok(await EmployeesService.GetAllAsync());
+                return Ok(_mapper.Map<IEnumerable<GetEmpDto>>(await _employeesService.GetAllEmpAsync()));
             }
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<CategoryResponse>> GetAsync(int id)
+        public async Task<ActionResult<GetEmpDto>> GetEmpByIdAsync(int id)
         {
-            var result = await EmployeesService.GetByIdAsync(id);
-            return Ok(result);
+            var result = await _employeesService.GetEmpByIdAsync(id);
+            if (result == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(_mapper.Map<GetEmpDto>(result));
+            }
         }
 
         [HttpPost]
-        public async Task<ActionResult<CategoryResponse>> CreateAsync([FromBody] EmployeeRequest request)
+        public async Task<ActionResult<GetEmpDto>> CreateEmpAsync(CreateEmpDto createEmpDto)
         {
-            var productId = await EmployeesService.CreateAsync(request);
-            return Ok(productId);
+            var empModel = _mapper.Map<Employee>(createEmpDto);
+            await _employeesService.CreateEmpAsync(empModel);
+
+            var getEmpDTO = _mapper.Map<GetEmpDto>(empModel);
+            return Ok(getEmpDTO);
         }
 
+        //PUT/API
         [HttpPut("{id}")]
-        public async Task<ActionResult<CategoryResponse>> UpdateAsync(int id, [FromBody] EmployeeRequest request)
+        public async Task<ActionResult> UpdateEmp(int id, UpdateEmpDto updateEmpDTO)
         {
-            var result = await EmployeesService.UpdateAsync(id, request);
-            return Ok(result);
+            var EmpModelFromDomain = await _employeesService.GetEmpByIdAsync(id);
+
+            if (EmpModelFromDomain != null)
+            {
+                //mapper has alrady mapped data from dto to DomainModel
+                //you dnt have to perform any more action other than save to save updates 
+                _mapper.Map(updateEmpDTO, EmpModelFromDomain);
+
+                //still going to call update as a good practise
+                _ = _employeesService.UpdateEmpAsync(EmpModelFromDomain);
+
+                return NoContent();
+            }
+            else
+            {
+                return NotFound();
+            }
         }
+
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<int>> DeleteAsync(int id)
+        public async Task<ActionResult> DeleteEmpAsync(int id)
         {
-            var result = await EmployeesService.DeleteAsync(id);
-            return Ok(result);
+            var EmpModelFromDomain = await _employeesService.GetEmpByIdAsync(id);
+
+            if (EmpModelFromDomain != null)
+            {
+                _ = _employeesService.DeleteEmpAsync(EmpModelFromDomain);
+                return NoContent();
+            }
+            else
+            {
+                return NotFound();
+            }
         }
     }
 }
